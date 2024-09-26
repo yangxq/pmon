@@ -72,6 +72,13 @@ sw		v1,		4(v0); \
 nop; \
 nop;
 
+#ifdef LEMOTE_A1801
+#define WatchDog_Close \
+GPIO_CLEAR_OUTPUT(0x2) \
+GPIO_SET_OUTPUT(0x18) 
+
+#define WatchDog_Enable nop;
+#else
 /* WatchDog Close for chip MAX6369*/
 #define WatchDog_Close \
 GPIO_CLEAR_OUTPUT(0x1<<5); \
@@ -92,7 +99,7 @@ subu v1,1; \
 bnez v1,78b; \
 nop; \
 GPIO_SET_OUTPUT(0x1<<13);
-
+#endif
 
 #define w83627write(x,y,z) \
 li		v0,		0xb800002e; \

@@ -99,16 +99,24 @@ ATTENTION:
 	sd	t1, 0x0(t0)
 	dli	t1, (L1_DIV << 0)
 	sd	t1, 0x8(t0)
+#ifdef LEMOTE_A1801
+	dli t1, 0x15c1085704480c80
+#else
 	dli	t1, (L1_LOOPC << 54) | (L1_REFC  << 48) | \
                     (L1_DIV   << 42) | (L1_LOOPC << 32) | (L1_REFC << 26) | \
                     (SYS_PD   << 19) | (ST_PLL   << 22) | (0x3 << 10) | (0x1 << 7)
+#endif
 	sd	t1, 0(t0)
 	ori	t1, PLL_L1_ENA
 	sd      t1, 0x0(t0)
 
 11: //wait_locked_sys:
 	ld      a0, 0x0(t0)
+#ifdef LEMOTE_A1801
+	li      a1, 0x20000
+#else
 	li      a1, PLL_L1_LOCKED
+#endif
 	and     a0, a1, a0
 	beqz    a0, 11b //wait_locked_sys
 	nop
@@ -138,9 +146,17 @@ ATTENTION:
 	dli     t0, 0x900000001fe00194
 	or	    t0, t0, s1
 	lw      a0, 0x0(t0)
+#ifdef LEMOTE_A1801
+	li      a1, 0x3e0
+#else	
 	li      a1, MEM_CLKSEL
+#endif
 	and     a0, a0, a1
+#ifdef LEMOTE_A1801
+	li	    a1, 0x1e0
+#else	
 	li	    a1, MEM_HSEL
+#endif
 	bne	    a0, a1, 30f
 	nop
 
@@ -148,7 +164,11 @@ ATTENTION:
 
 	dli     t0, 0x900000001fe001c0
 	or	    t0, t0, s1
+#ifdef LEMOTE_A1801
+	dli     a0, 0x61d413a
+#else	
 	dli     a0, (DDR_DIV << 24) | (DDR_LOOPC << 14) | (DDR_REFC << 8) | (0x3 << 4) | (0x1 << 3) | PLL_MEM_ENA
+#endif
 	sw	    a0, 0x0(t0)
 21:
 	lw      a0, 0x0(t0)

@@ -536,6 +536,12 @@ bsp_start:
  * now, we just write ddr2 parameters directly. 
  * we should use i2c for memory auto detecting. 
  */
+#ifdef LEMOTE_A1801
+	GPIO_CLEAR_OUTPUT(0x10)
+	GPIO_CLEAR_OUTPUT(0x100)
+	GPIO_CLEAR_OUTPUT(0x1000)
+	GPIO_CLEAR_OUTPUT(0x2000)
+#endif
 	//Read sys_clk_sel
 	TTYDBG ("\r\n0xbfe00190  : ")
 	li  t2,0xbfe00190
@@ -562,6 +568,13 @@ bsp_start:
 	bal hexserial
 	nop
 	TTYDBG ("\r\n")
+
+#ifdef LEMOTE_A1801
+	GPIO_SET_OUTPUT(0x10)
+	GPIO_SET_OUTPUT(0x100)
+	GPIO_CLEAR_OUTPUT(0x1000)
+	GPIO_CLEAR_OUTPUT(0x2000)
+#endif
 
 //USING S1 FOR PASSING THE NODE ID
 	dli	s1, 0X0000000000000000
@@ -605,7 +618,19 @@ bsp_start:
 	jr      ra
 	nop
 
+#ifdef LEMOTE_A1801
+	GPIO_CLEAR_OUTPUT(0x8240)
+#endif
+
     TTYDBG("32 bit PCI space translate to 64 bit HT space\r\n")
+
+#ifdef LEMOTE_A1801
+	GPIO_SET_OUTPUT(0x10)
+	GPIO_SET_OUTPUT(0x100)
+	GPIO_CLEAR_OUTPUT(0x1000)
+	GPIO_CLEAR_OUTPUT(0x2000)
+#endif
+	
 #include "loongson3_ht1_32addr_trans.S"
 
     //config fix address bar for Misc devices block

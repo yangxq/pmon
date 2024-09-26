@@ -486,7 +486,9 @@ void tgt_devconfig()
 	_pci_devinit(1);	/* PCI device initialization */
 
 #ifndef MULTI_CHIP
+#ifndef LEMOTE_A1801
     usb_spi_init();
+#endif
 #endif
 
 #if (NMOD_X86EMU_INT10 > 0)||(NMOD_X86EMU >0)

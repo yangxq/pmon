@@ -1,0 +1,7 @@
+include "Targets/Bonito3a3000_7a/conf/Bonito.3a3000_7a"
+
+option  LEMOTE_A1801
+option  SHUT_SLAVES
+
+rmoption USE_SII9022a
+rmoption USE_CH7034
